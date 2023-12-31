@@ -1,0 +1,59 @@
+﻿<Window x:Class="StartStopServices.Views.MainWindowService"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Utility Windows Services"
+        Height="350" 
+        Width="525"
+        WindowStartupLocation="CenterScreen"
+        xmlns:viewModels="clr-namespace:StartStopServices.ViewModels">
+    <Window.Resources>
+        <viewModels:MainWindowServiceViewModel x:Key="WindowServiceViewModel" />
+    </Window.Resources>
+    <Grid  DataContext="{StaticResource WindowServiceViewModel}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        
+            <ListView Grid.Row="0" 
+                      Name="listView1"
+                      ItemsSource="{Binding ServicesCollection, NotifyOnSourceUpdated=True,Mode=TwoWay}" 
+                      SelectedItem="{Binding SelectedItemService,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                      SelectedValuePath="Name" 
+                      SelectionMode="Multiple"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="IsSelected" Value="{Binding Mode=TwoWay, Path=IsSelected}"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView AllowsColumnReorder="true" >
+                    <GridViewColumn Header="Name">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" FontFamily="Bold" FontSize="16"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn  Header="Status">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Foreground="{Binding StatusColor}" Text="{Binding Status}" FontFamily="Bold" FontSize="16"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+                </ListView.View>
+            </ListView>
+            
+            <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Bottom">
+                <Button Name="btnStarSelectedServices" Content="Start selected service(s)"  Command="{Binding CmdStartSelectedServices}"/>
+                <Button Name="btnStopSelectedServices" Content="Stop selected service(s)"  Command="{Binding CmdStopSelectedServices}"/>
+                <Button Name="btnListAllStartedServices" Content="List all started service(s)"  Command="{Binding CmdListAllStartedServices}"/>
+                <Button Name="btnListAllServices" Content="List all services"  Command="{Binding CmdListAllServices}"/>
+            </StackPanel>
+        
+    </Grid>
+</Window>
